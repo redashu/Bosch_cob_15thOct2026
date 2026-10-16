@@ -49,4 +49,50 @@ sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin dock
 docker version
 ```
 
+### setup vllm using docker 
 
+```
+
+docker  images
+                                                                                                           i Info →   U  In Use
+IMAGE   ID             DISK USAGE   CONTENT SIZE   EXTRA
+root@ashuvm1:~# 
+
+
+===> pulling vllm image 
+
+docker pull vllm/vllm-openai-cpu
+
+
+
+===verify 
+
+root@ashuvm1:~# docker pull vllm/vllm-openai-cpu
+Using default tag: latest
+latest: Pulling from vllm/vllm-openai-cpu
+Digest: sha256:495c84fe30f3572b83a78100a1e8ba423dbb77fc532ecefebe114e6b77327bd9
+Status: Image is up to date for vllm/vllm-openai-cpu:latest
+docker.io/vllm/vllm-openai-cpu:latest
+root@ashuvm1:~# 
+root@ashuvm1:~# 
+root@ashuvm1:~# docker  images
+                                                                                                           i Info →   U  In Use
+IMAGE                         ID             DISK USAGE   CONTENT SIZE   EXTRA
+vllm/vllm-openai-cpu:latest   495c84fe30f3       6.73GB         1.57GB        
+root@ashuvm1:~# 
+
+
+
+===> using vllm launching model
+
+
+docker run -d  --name vllm-node1  --network host --shm-size=2g  -e VLLM_CPU_KVCACHE_SPACE=2 -v /root/models-cache:/root/.cache/huggingface vllm/vllm-openai-cpu:latest-x86_64  --model HuggingFaceTB/SmolLM2-360M-Instruct --dtype bfloat16 --max-model-len 512  --host 0.0.0.0 --port 8000 
+ec8657100937e4691c5c72597f6ba8d94ffcf4df9141f1e010bcdc33f0f4b2ea
+root@node11:~# 
+root@node11:~# docker  ps
+CONTAINER ID   IMAGE                                COMMAND                  CREATED         STATUS         PORTS     NAMES
+ec8657100937   vllm/vllm-openai-cpu:latest-x86_64   "vllm serve --model …"   7 seconds ago   Up 6 seconds             vllm-node1
+root@node11:~# 
+
+
+```
