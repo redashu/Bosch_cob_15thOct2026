@@ -96,3 +96,18 @@ root@node11:~#
 
 
 ```
+
+### connecting with model 
+
+```
+curl -X POST http://20.161.26.245:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "HuggingFaceTB/SmolLM2-360M-Instruct",
+    "messages": [
+      {"role": "user", "content": "Explain Docker in two sentences."}
+    ],
+    "max_tokens": 60
+  }'
+
+  ```
